@@ -1,29 +1,26 @@
-Node *reversealt(Node *head, int k)
+vector<bool> bigvisited(V, false);
+for (int i = 0; i < V; i++)
 {
-    Node *curr = head;
-    Node *prev = NULL, *next = NULL;
-    int cnt = 0;
-    wile(curr && cnt < k)
+    if (bigvisited[i])
+        continue;
+    vector<bool> visited(V, false);
+    stack<int> s;
+    s.push(i);
+    visited[i] = true;
+    bigvisited[i] = true;
+    while (!s.empty())
     {
-        next = curr->next;
-        curr->next = prev;
-        prev = curr;
-        curr = next;
-        cnt++;
+        int u = s.top();
+        s.pop();
+        for (int j = 0; j < adj[u].size(); j++)
+        {
+            int v = adj[u][j];
+            if (visited[v])
+                return true;
+            visited[v] = true;
+            bigvisited[v] = true;
+            s.push(v);
+        }
     }
-    if (head)
-    {
-        head->next = curr;
-    }
-    cnt = 0;
-    while (cnt < k - 1 && curr)
-    {
-        curr = curr->next;
-        cnt++;
-    }
-    if (curr)
-    {
-        curr->next = reversealt(curr->next, k);
-    }
-    return prev;
 }
+return false;
