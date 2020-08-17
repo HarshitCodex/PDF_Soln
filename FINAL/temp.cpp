@@ -1,26 +1,58 @@
-vector<bool> bigvisited(V, false);
-for (int i = 0; i < V; i++)
+#include <bits/stdc++.h>
+using namespace std;
+int maxSpecialProduct(vector<int> &A)
 {
-    if (bigvisited[i])
-        continue;
-    vector<bool> visited(V, false);
     stack<int> s;
-    s.push(i);
-    visited[i] = true;
-    bigvisited[i] = true;
-    while (!s.empty())
+    int n = A.size();
+    vector<int> nge(n, -1), pge(n, -1);
+    for (int i = 0; i < n; i++)
     {
-        int u = s.top();
-        s.pop();
-        for (int j = 0; j < adj[u].size(); j++)
+        while ((!s.empty()) && A[i] > A[s.top()])
         {
-            int v = adj[u][j];
-            if (visited[v])
-                return true;
-            visited[v] = true;
-            bigvisited[v] = true;
-            s.push(v);
+            nge[s.top()] = i;
+            s.pop();
         }
+        s.push(i);
     }
+    stack<int> s1;
+    for (int i = 0; i < n; i++)
+    {
+        while ((!s1.empty()) && A[i] >= A[s1.top()])
+        {
+            s1.pop();
+        }
+        if (!s1.empty())
+        {
+            pge[i] = s1.top();
+        }
+        s1.push(i);
+    }
+    int maxres = 0;
+    // for(int i=0;i<n;i++)
+    // {
+    //     cout<<nge[i]<<" ";
+    // }
+    // cout<<endl;
+    // for(int i=0;i<n;i++)
+    // {
+    //     cout<<pge[i]<<" ";
+    // }
+    // cout<<endl;
+    for (int i = 0; i < n; i++)
+    {
+        if (nge[i] != -1 && pge[i] != -1)
+            maxres = max(nge[i] * pge[i], maxres);
+    }
+    return maxres % 1000000007;
 }
-return false;
+int main()
+{
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> a[i];
+    }
+    cout << maxSpecialProduct(a);
+}
